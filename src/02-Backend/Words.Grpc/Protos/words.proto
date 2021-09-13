@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+option csharp_namespace = "Words.Grpc";
+
+package words;
+
+service Words {
+	rpc AddKeywords (AddKeywordsRequest) returns (AddKeywordsResponse);
+	rpc GetFrequencies (GetFrequenciesRequest) returns (GetFrequenciesResponse);
+}
+
+message AddKeywordsRequest {
+	repeated string words = 1;
+}
+
+message AddKeywordsResponse {
+	int32 wordsAdded = 1;
+}
+
+message GetFrequenciesRequest {
+	int32 minFrequency = 1;
+}
+
+message GetFrequenciesResponse {
+	map<string, int32> frequencies = 1;
+}

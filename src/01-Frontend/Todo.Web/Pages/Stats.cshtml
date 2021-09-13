@@ -1,0 +1,69 @@
+﻿@page
+@model Todo.Web.Pages.StatsModel
+@{
+    ViewData["Title"] = "Your Stats";
+}
+
+<h1 class="mb-5">@ViewData["Title"]</h1>
+
+<h4 class="mb-5">Keep up the good work!</h4>
+
+<h5 class="mb-4">All-time stats</h5>
+
+<table class="table table-dark table-striped mb-5" style="width: 30em;">
+    <tbody>
+        <tr>
+            <td scope="row">All-time number of tasks</td>
+            <td>@Model.AllTimeTotal</td>
+        </tr>
+        <tr>
+            <td scope="row">All-time percentage done</td>
+            <td>@($"{Model.AllTimePercentageDone:P0}")</td>
+        </tr>
+        <tr>
+            <td scope="row">All-time percentage procrastinated</td>
+            <td>@($"{Model.AllTimePercentageProcrastinated:P0}")</td>
+        </tr>
+    </tbody>
+</table>
+
+<h5 class="mb-4">Stats of future tasks</h5>
+
+<table class="table table-primary table-striped mb-5" style="width: 30em;">
+    <tbody>
+        <tr>
+            <td scope="row">Tasks still left to do</td>
+            <td>@Model.FutureTasksTotal</td>
+        </tr>
+        <tr>
+            <td scope="row">Percentage done</td>
+            <td>@($"{Model.FutureTasksPercentageDone:P0}")</td>
+        </tr>
+        <tr>
+            <td scope="row">Percentage procrastinated</td>
+            <td>@($"{Model.FutureTasksPercentageProcrastinated:P0}")</td>
+        </tr>
+    </tbody>
+</table>
+
+<h5 class="mb-4">Word frequency</h5>
+
+<table class="table table-secondary table-striped mb-5" style="width: 30em;">
+    <thead>
+        <tr>
+            <th>Word</th>
+            <th>Frequency</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var wordFrequency in Model.WordFrequencies)
+    {
+        <tr>
+            <td>@wordFrequency.Key</td>
+            <td>@wordFrequency.Value</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<a asp-page="./Index" class="btn btn-primary">Back to your TODO list</a>

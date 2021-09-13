@@ -1,0 +1,110 @@
+﻿@page
+@using Todo.Web.Extensions
+@using Todo.Web.Entities
+@model IndexModel
+@{
+    ViewData["Title"] = "Your TODO list";
+}
+
+<form method="post" name="form" class="mb-5">
+    <div class="form-check form-check-inline">
+        <input asp-for="ShowPast" class="form-check-input" onchange="document.form.submit()" />
+        <label asp-for="ShowPast" class="form-check-label">Show past tasks</label>
+    </div>
+
+    <div class="form-check form-check-inline">
+        <input asp-for="ShowCompleted" class="form-check-input" onchange="document.form.submit()" />
+        <label asp-for="ShowCompleted" class="form-check-label">Show completed tasks</label>
+    </div>
+</form>
+
+@if (@Model.TodoNotes.Any())
+{
+    <div class="text-center mb-5">
+        <h1 class="display-4">Let's get this stuff done!</h1>
+    </div>
+
+    <table class="table mb-5">
+        <thead class="table-dark">
+            <tr>
+                <th scope="col">TODO</th>
+                <th scope="col">Deadline</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody class="table-hover">
+            @foreach (var todo in @Model.TodoNotes)
+            {
+                @if (todo.Accomplished)
+                {
+                    <tr class="@todo.GetTableRowStyle()">
+                        <th scope="row">
+                            <del>@todo.Text</del>
+                        </th>
+                        <td>
+                            Done.
+                        </td>
+                        <td>
+                            <span class="btn btn-secondary">Mark as done</span>
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    <tr class="@todo.GetTableRowStyle()">
+                        <th scope="row">
+                            @todo.Text
+                        </th>
+                        <td>
+                            @todo.DueBy.Humanize()
+                        </td>
+                        <td>
+                            @if (todo.DueBy.Date < DateTime.Today)
+                            {
+                                <span class="btn btn-secondary">Mark as done</span>
+                            }
+                            else
+                            {
+                                <a asp-page="./Action/MarkAsDone"
+                                   asp-route-todoNoteId="@todo.Id"
+                                   class="btn btn-info mr-2">
+                                    Mark as done
+                                </a>
+                                <a asp-page="./Action/Delete"
+                                   asp-route-todoNoteId="@todo.Id"
+                                   class="btn btn-danger">
+                                    Delete
+                                </a>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+    <p>
+        <a asp-page="./Add" class="btn btn-primary">
+            I've got something else to do!
+        </a>
+    </p>
+}
+else
+{
+    <h1 class="text-center mb-5">
+        Hey, you, stop fooling around!
+    </h1>
+
+    <div class="text-center">
+        <p>
+            <a asp-page="./Add" class="btn btn-primary">
+                I want to add my first TODO now!
+            </a>
+        </p>
+        <p class="mt-3">
+            <a asp-page="./Add" asp-route-nothingToDo="@NothingToDo.FirstTry" class="btn btn-secondary">
+                I've got nothing to do...
+            </a>
+        </p>
+    </div>
+}
