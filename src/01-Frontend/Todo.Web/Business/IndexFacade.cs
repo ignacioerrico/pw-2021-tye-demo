@@ -1,27 +1,28 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Todo.Web.DataAccess.Repositories;
+using System.Threading.Tasks;
 using Todo.Web.Entities;
 
 namespace Todo.Web.Business
 {
     public interface IIndexFacade
     {
-        List<TodoNote> GetAll(bool includeDeleted, bool includePast, bool includeCompleted);
+        Task<List<TodoNote>> GetAllAsync(bool includeDeleted, bool includePast, bool includeCompleted);
     }
 
     public class IndexFacade : IIndexFacade
     {
-        private readonly ITodoRepository _todoRepository;
+        private readonly TodoHttpClient _httpClient;
 
-        public IndexFacade(ITodoRepository todoRepository)
+        public IndexFacade(TodoHttpClient httpClient)
         {
-            _todoRepository = todoRepository;
+            _httpClient = httpClient;
         }
 
-        public List<TodoNote> GetAll(bool includeDeleted, bool includePast, bool includeCompleted)
+        public async Task<List<TodoNote>> GetAllAsync(bool includeDeleted, bool includePast, bool includeCompleted)
         {
-            return _todoRepository.GetAll(includeDeleted, includePast, includeCompleted).ToList();
+            var todoNotes = await _httpClient.GetAllAsync(includeDeleted, includePast, includeCompleted);
+            return todoNotes.ToList();
         }
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Todo.Web.Business;
@@ -17,9 +18,9 @@ namespace Todo.Web.Pages
 
         public IEnumerable<KeyValuePair<string, int>> WordFrequencies { get; set; }
 
-        public void OnGet([FromServices] IStatsFacade statsFacade)
+        public async Task OnGetAsync([FromServices] IStatsFacade statsFacade)
         {
-            var stats = statsFacade.CalculateStats();
+            var stats = await statsFacade.CalculateStatsAsync();
 
             AllTimeTotal = stats.AllTimeTotal;
             AllTimePercentageDone = stats.AllTimePercentageDone;
@@ -29,7 +30,7 @@ namespace Todo.Web.Pages
             FutureTasksPercentageDone = stats.FutureTasksPercentageDone;
             FutureTasksPercentageProcrastinated = stats.FutureTasksPercentageProcrastinated;
 
-            WordFrequencies = statsFacade.GetFrequencies();
+            WordFrequencies = await statsFacade.GetFrequenciesAsync();
         }
     }
 }

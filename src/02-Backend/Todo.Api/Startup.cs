@@ -30,7 +30,7 @@ namespace Todo.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddGrpcClient<Words.Grpc.Words.WordsClient>(options =>
-                options.Address = new Uri(Configuration["GrpcSettings:WordsUrl"])); // TODO: Hardcoded URL! (From config.)
+                options.Address = Configuration.GetServiceUri("words-grpc"));
             services.AddScoped<WordsGrpcService>();
 
             services.AddControllers();

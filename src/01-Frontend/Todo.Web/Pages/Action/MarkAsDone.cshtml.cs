@@ -1,21 +1,21 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Todo.Web.DataAccess.Repositories;
 
 namespace Todo.Web.Pages.Action
 {
     public class MarkAsDoneModel : PageModel
     {
-        private readonly ITodoRepository _todoRepository;
+        private readonly TodoHttpClient _httpClient;
 
-        public MarkAsDoneModel(ITodoRepository todoRepository)
+        public MarkAsDoneModel(TodoHttpClient httpClient)
         {
-            _todoRepository = todoRepository;
+            _httpClient = httpClient;
         }
 
-        public IActionResult OnGet(int todoNoteId)
+        public async Task<IActionResult> OnGetAsync(int todoNoteId)
         {
-            if (_todoRepository.MarkAsDone(todoNoteId))
+            if (await _httpClient.MarkAsDoneAsync(todoNoteId))
                 return RedirectToPage("/Index");
 
             return Page();

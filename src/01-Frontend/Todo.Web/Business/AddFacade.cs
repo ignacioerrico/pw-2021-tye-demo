@@ -1,40 +1,37 @@
-﻿using Todo.Core.Util;
-using Todo.Web.Cache;
-using Todo.Web.DataAccess.Repositories;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using Todo.Core.Util;
 using Todo.Web.Entities;
 
 namespace Todo.Web.Business
 {
     public interface IAddFacade
     {
-        void CreateNew(TodoNote todoNote);
-        void CacheWords(string todoNoteText);
+        Task CreateNewAsync(TodoNote todoNote);
+        Task CacheWordsAsync(string todoNoteText);
     }
 
     public class AddFacade : IAddFacade
     {
-        private readonly ITodoRepository _todoRepository;
-        private readonly ICacheWords _cacheWords;
+        private readonly TodoHttpClient _httpClient;
         private readonly IKeywordFinder _keywordFinder;
 
-        public AddFacade(ITodoRepository todoRepository, ICacheWords cacheWords, IKeywordFinder keywordFinder)
+        public AddFacade(TodoHttpClient httpClient, IKeywordFinder keywordFinder)
         {
-            _todoRepository = todoRepository;
-            _cacheWords = cacheWords;
+            _httpClient = httpClient;
             _keywordFinder = keywordFinder;
         }
 
-        public void CreateNew(TodoNote todoNote)
+        public async Task CreateNewAsync(TodoNote todoNote)
         {
-            _todoRepository.AddNew(todoNote);
+            await _httpClient.AddNewAsync(todoNote);
         }
 
-        public void CacheWords(string todoNoteText)
+        public async Task CacheWordsAsync(string todoNoteText)
         {
             var wordsToCache = _keywordFinder.GetKeywords(todoNoteText);
 
-            foreach (var word in wordsToCache)
-                _cacheWords.Add(word);
+            await _httpClient.AddKeywordsAsync(wordsToCache.ToList());
         }
     }
 }

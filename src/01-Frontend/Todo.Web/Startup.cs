@@ -1,19 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Mapster;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Todo.Core.Dto;
 using Todo.Core.Util;
 using Todo.Web.Business;
-using Todo.Web.Cache;
-using Todo.Web.DataAccess.Repositories;
+using Todo.Web.Business.Models;
+using Todo.Web.Entities;
 
 namespace Todo.Web
 {
@@ -31,12 +26,15 @@ namespace Todo.Web
         {
             services.AddRazorPages();
 
-            services.AddSingleton<IIndexFacade, IndexFacade>();
-            services.AddSingleton<IAddFacade, AddFacade>();
-            services.AddSingleton<IStatsFacade, StatsFacade>();
+            services.AddHttpClient<TodoHttpClient>(httpClient =>
+            {
+                httpClient.BaseAddress = Configuration.GetServiceUri("todo-api");
+            });
 
-            services.AddSingleton<ITodoRepository, TodoRepository>();
-            services.AddSingleton<ICacheWords, CacheWords>();
+            services.AddScoped<IIndexFacade, IndexFacade>();
+            services.AddScoped<IAddFacade, AddFacade>();
+            services.AddScoped<IStatsFacade, StatsFacade>();
+
             services.AddSingleton<IKeywordFinder, KeywordFinder>();
         }
 
@@ -53,6 +51,14 @@ namespace Todo.Web
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            TypeAdapterConfig<TodoNote, TodoNoteDto>
+                .NewConfig()
+                .TwoWays();
+            TypeAdapterConfig<TodoNote, TodoNoteForUpdateDto>
+                .NewConfig();
+            TypeAdapterConfig<StatsDto, StatsModel>
+                .NewConfig();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

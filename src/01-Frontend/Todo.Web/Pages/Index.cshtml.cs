@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Todo.Web.Business;
@@ -16,7 +17,7 @@ namespace Todo.Web.Pages
         [BindProperty(SupportsGet = true)]
         public bool ShowCompleted { get; set; }
 
-        public void OnGet([FromServices] IIndexFacade indexFacade)
+        public async Task OnGetAsync([FromServices] IIndexFacade indexFacade)
         {
             if (Request.Query.ContainsKey("ShowPast")) // Is it in the query string?
             {
@@ -34,7 +35,7 @@ namespace Todo.Web.Pages
             else if (Request.Cookies.ContainsKey("ShowCompleted")) // Is it in the cookie?
                 ShowCompleted = bool.Parse(Request.Cookies["ShowCompleted"]);
 
-            TodoNotes = indexFacade.GetAll(includeDeleted: false, ShowPast, ShowCompleted);
+            TodoNotes = await indexFacade.GetAllAsync(includeDeleted: false, ShowPast, ShowCompleted);
         }
 
         public IActionResult OnPost()

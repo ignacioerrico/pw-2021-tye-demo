@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Todo.Web.Business;
@@ -21,14 +22,14 @@ namespace Todo.Web.Pages
                 : new TodoNote();
         }
 
-        public IActionResult OnPost([FromServices] IAddFacade addFacade)
+        public async Task<IActionResult> OnPostAsync([FromServices] IAddFacade addFacade)
         {
             if (!ModelState.IsValid)
                 return Page();
 
-            addFacade.CreateNew(TodoNote);
+            await addFacade.CreateNewAsync(TodoNote);
 
-            addFacade.CacheWords(TodoNote.Text);
+            await addFacade.CacheWordsAsync(TodoNote.Text);
 
             return RedirectToPage("./Index");
         }
