@@ -21,7 +21,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{FDA90499-A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Words.Grpc", "src\02-Backend\Words.Grpc\Words.Grpc.csproj", "{DF896E15-2DDB-4B40-B454-AF03DA1AC0DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Todo.Core.Tests", "test\Todo.Core.Tests\Todo.Core.Tests.csproj", "{7BB5112B-AA77-4158-B579-2760EE14B173}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Todo.Core.Tests", "test\Todo.Core.Tests\Todo.Core.Tests.csproj", "{7BB5112B-AA77-4158-B579-2760EE14B173}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cfg", "cfg", "{9D0967AB-805E-4DA5-AA33-DDD5D282CF50}"
+	ProjectSection(SolutionItems) = preProject
+		tye.yaml = tye.yaml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
