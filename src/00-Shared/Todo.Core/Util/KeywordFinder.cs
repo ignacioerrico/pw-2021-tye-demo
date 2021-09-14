@@ -34,7 +34,7 @@ namespace Todo.Core.Util
             "isn't", "aren't", "don't", "doesn't", "haven't", "hasn't",
 
             // Modal verbs
-            "can", "could", "may", "might", "shall", "should", "will", "would", "must", "dare", "need",
+            "can", "could", "may", "might", "shall", "should", "will", "would", "must", "dare", "need", "want",
             "can't", "couldn't", "shouldn't", "won't", "wouldn't", "mustn't", "needn't",
 
             // Negation

@@ -15,7 +15,7 @@ namespace Todo.Api.Business
     public interface ITodoFacade
     {
         Task<int> AddKeywordsAsync(List<string> words);
-        Task<Dictionary<string, int>> GetFrequenciesAsync(int minFrequency);
+        Task<int> GetFrequencyAsync(string word);
         IEnumerable<TodoNoteDto> GetAll(bool includeDeleted, bool includePast, bool includeCompleted);
         TodoNoteDto GetById(int id);
         StatsDto GetStats();
@@ -45,10 +45,10 @@ namespace Todo.Api.Business
             return wordsAdded;
         }
 
-        public async Task<Dictionary<string, int>> GetFrequenciesAsync(int minFrequency)
+        public async Task<int> GetFrequencyAsync(string word)
         {
-            var frequencies = await _grpcService.GetFrequenciesAsync(minFrequency);
-            return frequencies;
+            var frequency = await _grpcService.GetFrequencyAsync(word);
+            return frequency;
         }
 
         public IEnumerable<TodoNoteDto> GetAll(bool includeDeleted, bool includePast, bool includeCompleted)

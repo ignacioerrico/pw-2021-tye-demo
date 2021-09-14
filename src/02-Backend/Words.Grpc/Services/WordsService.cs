@@ -21,7 +21,7 @@ namespace Words.Grpc.Services
             foreach (var word in request.Words)
                 _cacheWords.Add(word);
 
-            _logger.LogInformation($"{request.Words.Count} word(s) added to the cache.  Total distinct words in the cache: {_cacheWords.Size}.");
+            _logger.LogInformation($"{request.Words.Count} word(s) added to the cache.");
 
             var response = new AddKeywordsResponse
             {
@@ -31,16 +31,16 @@ namespace Words.Grpc.Services
             return Task.FromResult(response);
         }
 
-        public override Task<GetFrequenciesResponse> GetFrequencies(GetFrequenciesRequest request, ServerCallContext context)
+        public override async Task<GetFrequencyResponse> GetFrequency(GetFrequencyRequest request, ServerCallContext context)
         {
-            var result = _cacheWords.GetFrequencies(request.MinFrequency);
+            var frequency = await _cacheWords.GetFrequency(request.Word);
 
-            var response = new GetFrequenciesResponse
+            var response = new GetFrequencyResponse
             {
-                Frequencies = { result }
+                Frequency = frequency
             };
 
-            return Task.FromResult(response);
+            return response;
         }
     }
 }

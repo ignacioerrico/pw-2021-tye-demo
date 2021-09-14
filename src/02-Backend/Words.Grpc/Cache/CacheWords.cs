@@ -1,41 +1,48 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Text.Json;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace Words.Grpc.Cache
 {
     public interface ICacheWords
     {
-        int Size { get; }
-        void Add(string word);
-        int GetFrequency(string word);
-        Dictionary<string, int> GetFrequencies(int amount);
+        Task Add(string word);
+        Task<int> GetFrequency(string word);
     }
 
     public class CacheWords : ICacheWords
     {
-        private readonly Dictionary<string, int> _words = new Dictionary<string, int>();
+        private readonly IDistributedCache _redisCache;
 
-        public int Size => _words.Count;
-
-        public void Add(string word)
+        public CacheWords(IDistributedCache redisCache)
         {
-            if (_words.ContainsKey(word))
-                _words[word]++;
+            _redisCache = redisCache;
+        }
+
+        public async Task Add(string word)
+        {
+            var frequencyJson = await _redisCache.GetStringAsync(word);
+
+            string frequency;
+            if (string.IsNullOrWhiteSpace(frequencyJson))
+            {
+                // Not found in the cache -> add it.
+                frequency = JsonSerializer.Serialize(1);
+            }
             else
-                _words[word] = 1;
+            {
+                // Increment the frequency
+                var currentFrequency = JsonSerializer.Deserialize<int>(frequencyJson);
+                frequency = JsonSerializer.Serialize(++currentFrequency);
+            }
+
+            await _redisCache.SetStringAsync(word, frequency);
         }
 
-        public int GetFrequency(string word)
+        public async Task<int> GetFrequency(string word)
         {
-            return _words.ContainsKey(word) ? _words[word] : 0;
-        }
-
-        public Dictionary<string, int> GetFrequencies(int minFrequency)
-        {
-            if (minFrequency <= 0)
-                return _words;
-
-            return _words.Where(w => w.Value >= minFrequency).ToDictionary(kv => kv.Key, kv => kv.Value);
+            var frequencyJson = await _redisCache.GetStringAsync(word);
+            return string.IsNullOrWhiteSpace(frequencyJson) ? 0 : JsonSerializer.Deserialize<int>(frequencyJson);
         }
     }
 }

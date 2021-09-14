@@ -7,7 +7,7 @@ namespace Todo.Web.Business
     public interface IStatsFacade
     {
         Task<StatsModel> CalculateStatsAsync();
-        Task<Dictionary<string, int>> GetFrequenciesAsync();
+        Task<int> GetFrequencyAsync(string word);
     }
 
     public class StatsFacade : IStatsFacade
@@ -25,10 +25,10 @@ namespace Todo.Web.Business
             return stats;
         }
 
-        public async Task<Dictionary<string, int>> GetFrequenciesAsync()
+        public async Task<int> GetFrequencyAsync(string word)
         {
-            var frequencies = await _httpClient.GetFrequenciesAsync(0);
-            return frequencies;
+            var frequency = await _httpClient.GetFrequencyAsync(word);
+            return frequency;
         }
     }
 }

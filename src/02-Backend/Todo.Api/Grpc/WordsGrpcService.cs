@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Todo.Core.Util;
 using Words.Grpc;
 
 namespace Todo.Api.Grpc
@@ -9,12 +7,10 @@ namespace Todo.Api.Grpc
     public class WordsGrpcService
     {
         private readonly Words.Grpc.Words.WordsClient _client;
-        private readonly IKeywordFinder _keywordFinder;
 
-        public WordsGrpcService(Words.Grpc.Words.WordsClient client, IKeywordFinder keywordFinder)
+        public WordsGrpcService(Words.Grpc.Words.WordsClient client)
         {
             _client = client;
-            _keywordFinder = keywordFinder;
         }
 
         public async Task<int> AddKeywordsAsync(IEnumerable<string> keywords)
@@ -25,12 +21,12 @@ namespace Todo.Api.Grpc
             return response.WordsAdded;
         }
 
-        public async Task<Dictionary<string, int>> GetFrequenciesAsync(int minFrequency)
+        public async Task<int> GetFrequencyAsync(string word)
         {
-            var getFrequenciesRequest = new GetFrequenciesRequest { MinFrequency = minFrequency };
-            var response = await _client.GetFrequenciesAsync(getFrequenciesRequest);
+            var getFrequenciesRequest = new GetFrequencyRequest { Word = word };
+            var response = await _client.GetFrequencyAsync(getFrequenciesRequest);
 
-            return response.Frequencies.ToDictionary(kv => kv.Key, kv => kv.Value);
+            return response.Frequency;
         }
     }
 }

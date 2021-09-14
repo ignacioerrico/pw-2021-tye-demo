@@ -48,22 +48,22 @@
 
 <h5 class="mb-4">Word frequency</h5>
 
-<table class="table table-secondary table-striped mb-5" style="width: 30em;">
-    <thead>
-        <tr>
-            <th>Word</th>
-            <th>Frequency</th>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach (var wordFrequency in Model.WordFrequencies)
+<div class="mb-5">
+    <form method="post" class="mb-3">
+        <label asp-for="Word"></label>
+        <div class="input-group" style="width: 30em;">
+            <input asp-for="Word" class="form-control" placeholder="A word" value="@Model.Word" aria-label="A word" aria-describedby="button-addon2" />
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-outline-secondary">Check word frequency</button>
+            </div>
+        </div>
+        <span class="text-danger" asp-validation-for="Word"></span>
+    </form>
+
+    @if (!string.IsNullOrWhiteSpace(Model.WordSearched))
     {
-        <tr>
-            <td>@wordFrequency.Key</td>
-            <td>@wordFrequency.Value</td>
-        </tr>
+        <p>The word "<strong>@Model.WordSearched</strong>" has been used <strong>@Model.Frequency</strong> time(s).</p>
     }
-    </tbody>
-</table>
+</div>
 
 <a asp-page="./Index" class="btn btn-primary">Back to your TODO list</a>

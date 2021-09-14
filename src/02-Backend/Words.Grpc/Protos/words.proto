@@ -6,7 +6,7 @@ package words;
 
 service Words {
 	rpc AddKeywords (AddKeywordsRequest) returns (AddKeywordsResponse);
-	rpc GetFrequencies (GetFrequenciesRequest) returns (GetFrequenciesResponse);
+	rpc GetFrequency (GetFrequencyRequest) returns (GetFrequencyResponse);
 }
 
 message AddKeywordsRequest {
@@ -17,10 +17,10 @@ message AddKeywordsResponse {
 	int32 wordsAdded = 1;
 }
 
-message GetFrequenciesRequest {
-	int32 minFrequency = 1;
+message GetFrequencyRequest {
+	string word = 1;
 }
 
-message GetFrequenciesResponse {
-	map<string, int32> frequencies = 1;
+message GetFrequencyResponse {
+	int32 frequency = 1;
 }

@@ -110,12 +110,12 @@ namespace Todo.Api.Controllers
             return NoContent();
         }
 
-        [HttpGet("wordfreq/{minFrequency}")]
+        [HttpGet("wordfreq/{word}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<Dictionary<string, int>>> GetFrequencies(int minFrequency)
+        public async Task<ActionResult<int>> GetFrequency(string word)
         {
-            var frequencies = await _todoFacade.GetFrequenciesAsync(minFrequency);
-            return Ok(frequencies);
+            var frequency = await _todoFacade.GetFrequencyAsync(word);
+            return Ok(frequency);
         }
 
         // POST: api/<TodoController>/wordfreq

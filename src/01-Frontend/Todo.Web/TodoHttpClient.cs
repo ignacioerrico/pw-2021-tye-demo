@@ -81,14 +81,14 @@ namespace Todo.Web
             return frequencies;
         }
 
-        public async Task<Dictionary<string, int>> GetFrequenciesAsync(int minFrequency)
+        public async Task<int> GetFrequencyAsync(string word)
         {
-            var responseMessage = await _httpClient.GetAsync($"/api/todo/wordfreq/{minFrequency}");
-            if (!responseMessage.IsSuccessStatusCode) return null;
+            var responseMessage = await _httpClient.GetAsync($"/api/todo/wordfreq/{word}");
+            if (!responseMessage.IsSuccessStatusCode) return 0;
 
             var stream = await responseMessage.Content.ReadAsStreamAsync();
-            var frequencies = await JsonSerializer.DeserializeAsync<Dictionary<string, int>>(stream, _options) ?? new Dictionary<string, int>();
-            return frequencies;
+            var frequency = await JsonSerializer.DeserializeAsync<int>(stream, _options);
+            return frequency;
         }
 
         public async Task<bool> UpdateExistingAsync(TodoNote todoNote)

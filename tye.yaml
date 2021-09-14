@@ -8,8 +8,15 @@ name: todoapp
 services:
 - name: todo-web
   project: src/01-Frontend/Todo.Web/Todo.Web.csproj
-  replicas: 2
 - name: todo-api
   project: src/02-Backend/Todo.Api/Todo.Api.csproj
 - name: words-grpc
   project: src/02-Backend/Words.Grpc/Words.Grpc.csproj
+- name: redis
+  image: redis:alpine
+  bindings:
+  - port: 6379
+    connectionString: "${host}:${port}"
+- name: redis-cli
+  image: redis:alpine
+  args: "redis-cli -h redis MONITOR"
