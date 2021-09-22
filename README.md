@@ -37,7 +37,7 @@ Modern software solutions rarely consist of a single application. In the urge to
 - Tye is a **developer tool** that makes developing, testing, and deploying microservices and distributed applications easier.
 - Tye is a **.NET tool**. A .NET tool is simply a special NuGet package that contains a console application. In other words, it's a command line tool. However, as we'll see below, there is a frontend. There is also an [official plugin for VS Code](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-tye), as well as an [unofficial extension for Visual Studio](https://marketplace.visualstudio.com/items?itemName=ikkentim.TimsTyeExplorer).
 - Tye is an **open source experiment at Microsoft**. Being an experiment means that the future of what happens to Tye is not clear. The development team is trying out radical ideas for now in order to improve microservices developer productivity.
-  - Keep in mind that many of Microsoft's major products started out as a project. (During my talk I mentioned _Project Avalon_. Does it ring a bell? I wouldn't be surprised if it doesn't! But what if I saw WPF? Well, WPF started out as Project Avalon.)
+  - Keep in mind that many of Microsoft's major products started out as a project. (During my talk I mentioned _Project Avalon_. Does it ring a bell? I wouldn't be surprised if it doesn't! But what if I say WPF? Well, WPF started out as Project Avalon.)
   - So Tye is an experiment, but it's paving the way for a new way to work.
 - Tye is [hosted on Github](https://github.com/dotnet/tye). At the time of this writing, prerelease version `0.9.0-alpha.21380` is available, and that's the version I used during my presentation.
 
@@ -56,9 +56,13 @@ In the interest of focusing on Tye, I developed a somewhat simple application, b
 ![A simple diagram of the architecture of the application](https://github.com/ignacioerrico/pw-2021-tye-demo/blob/main/doc/a-not-so-trivial-app.jpg "A simple diagram of the architecture of the application")
 
 Components at a glance:
-- A frontend (.NET 5 Razor Pages).
-- A RESTful API (.NET 5 Web Api). Handles CRUD operations and communicates with a gRPC service to manage the keywords in the notes you take.
-- A gRPC service (.NET 5 gRPC service). Stores and retrieves keywords from a cache.
+- `Todo.Web`, the frontend (.NET 5 Razor Pages).
+- `Todo.Api`, a RESTful API (.NET 5 Web Api). Handles CRUD operations and communicates with a gRPC service to manage the keywords in the notes you take.
+- `Words.Grpc`, a gRPC service (.NET 5 gRPC service). Stores and retrieves keywords from a cache.
+- `Todo.Core`, a class library with utility classes and DTO's.
+- `Todo.Tests`, an NUnit project with unit tests.
+
+For simplicity, I implemented each component in a single project.
 
 In the different commits, you can see how the app evolved from isolated services that use in-memory data to something close to a final product that incorporates Tye features, such as service discovery and automatic management of dependencies (a Redis cache in this case).
 
