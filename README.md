@@ -4,6 +4,27 @@ This is a summary of the talk I gave on September 15, 2021, at [Programmers' Wee
 
 Here's a [simplified version of the slide deck I used](https://github.com/ignacioerrico/pw-2021-tye-demo/blob/main/doc/PW2021-Tye.pdf).
 
+# Table of contents
+
+- [Table of contents](#table-of-contents)
+- [Prelude](#prelude)
+- [What is Tye?](#what-is-tye)
+- [Getting Tye](#getting-tye)
+- [Case study](#case-study)
+  - [Todo Web](#todo-web)
+- [This is what you want to read!](#this-is-what-you-want-to-read)
+  - [Running the web app with Tye](#running-the-web-app-with-tye)
+  - [Adding more services](#adding-more-services)
+  - [Make services talk to each other](#make-services-talk-to-each-other)
+  - [Taking control](#taking-control)
+    - [Excercises](#excercises)
+  - [Deploying to Kubernetes](#deploying-to-kubernetes)
+    - [Using a local container registry](#using-a-local-container-registry)
+    - [Using Azure](#using-azure)
+- [Current limitations](#current-limitations)
+- [Cheat sheet](#cheat-sheet)
+- [Questions?](#questions)
+
 # Prelude
 
 Modern software solutions rarely consist of a single application. In the urge to increase the speed and efficiency of developing and managing software solutions at scale, _microservices_ and _cloud-native_ have become buzzwords. They introduced new challenges too, and working with multiple applications introduced some chores.
@@ -330,7 +351,7 @@ To undeploy, yes, you guessed it:
 
 All this just seems too easy, and this is only the beginning…
 
-# Limitations
+# Current limitations
 
 I said this before, and I say this again: Tye is an experiment. It's in alpha.
 
